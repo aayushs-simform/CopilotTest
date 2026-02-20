@@ -2,23 +2,25 @@
 
 ## Track Chosen
 <!-- Mark your choice with [x] -->
-- [ ] Backend Only
+- [-] Backend Only
 - [ ] Frontend Only
 - [ ] Full-Stack (Both)
 
 ## GitHub Copilot Usage Summary
 <!-- Describe how you used AI throughout the test. Be specific about when and how you leveraged AI tools. -->
 
-[Write your response here]
+First I read and understand the complete task for our requirements. Then created standard copilot instruction file to maintan code standards.
 
 ## Key Prompts Used
 <!-- List 3-5 important prompts you used with your AI assistant -->
 
-1. [Example: "Create a RESTful API endpoint for creating ..."]
-2. [Example: "How to implement reactive forms in Angular with ..."]
-3. [Example: "Debug TypeScript error in task service HTTP request"]
-4. 
-5. 
+Create an Task Management System with Below Requirements:
+
+Create endpoints for Task Management CRUD APIs with Following details:
+- Taks Name
+- Task Details
+- Task Status (To Do, In Progress, Completed)
+- Priority (Low, Medium, High)
 
 ## Design Decisions (optional)
 <!-- Explain key architectural or implementation decisions you made and why -->
@@ -35,15 +37,15 @@
 ## Challenges Faced
 <!-- Optional: Describe any challenges encountered and how you overcame them -->
 
-[Write your response here]
+Nothing in this task.
 
 ## Time Breakdown
 <!-- Optional: Approximate time spent on each phase -->
 
-- Planning & Setup: [X minutes]
-- Core Implementation: [X minutes]
-- Testing & Debugging: [X minutes]
-- Additional Requirements (30-min mark): [X minutes]
+- Planning & Setup: [10 minutes]
+- Core Implementation: [5 minutes]
+- Testing & Debugging: [5 minutes]
+- Additional Requirements (30-min mark): [2 minutes]
 - Additional Requirements (45-min mark): [X minutes]
 - Optional Challenge (if attempted): [X minutes]
 
@@ -53,7 +55,7 @@
 - [ ] Not Attempted
 - [ ] Option 1: Request Logging Middleware
 - [ ] Option 2: API Pagination
-- [ ] Option 3: Advanced Validation
+- [-] Option 3: Advanced Validation
 - [ ] Option 4: Task Filtering & Search
 - [ ] Option 5: Form Validation & UX
 - [ ] Option 6: Drag-and-Drop Task Reordering
@@ -64,14 +66,14 @@
 ## Additional Notes
 <!-- Any other information you'd like to share about your implementation -->
 
-[Write your response here]
+-
 
 ---
 
 ## Submission Checklist
 <!-- Verify before submitting -->
 
-- [ ] Code pushed to public GitHub repository
+- [-] Code pushed to public GitHub repository
 - [ ] All mandatory requirements completed
 - [ ] Code is tested and functional
 - [ ] README updated (if needed)
