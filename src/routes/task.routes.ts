@@ -31,7 +31,16 @@ const createTaskSchema = Joi.object({
     .messages({
       'any.only': 'Priority must be one of: Low, Medium, High',
       'any.required': 'Task priority is required'
-    })
+    }),
+  startDate: Joi.date().required().messages({
+    'date.base': 'Start date must be a valid date',
+    'any.required': 'Start date is required'
+  }),
+  dueDate: Joi.date().required().greater(Joi.ref('startDate')).messages({
+    'date.base': 'Due date must be a valid date',
+    'date.greater': 'Due date must be after start date',
+    'any.required': 'Due date is required'
+  })
 });
 
 const updateTaskSchema = Joi.object({
@@ -53,7 +62,19 @@ const updateTaskSchema = Joi.object({
     .valid(...Object.values(TaskPriority))
     .messages({
       'any.only': 'Priority must be one of: Low, Medium, High'
-    })
+    }),
+  startDate: Joi.date().messages({
+    'date.base': 'Start date must be a valid date'
+  }),
+  dueDate: Joi.date().when('startDate', {
+    is: Joi.exist(),
+    then: Joi.date().greater(Joi.ref('startDate')).messages({
+      'date.greater': 'Due date must be after start date'
+    }),
+    otherwise: Joi.date()
+  }).messages({
+    'date.base': 'Due date must be a valid date'
+  })
 }).min(1).messages({
   'object.min': 'At least one field must be provided for update'
 });

@@ -13,6 +13,8 @@ export class TaskController {
         details: task.details,
         status: task.status,
         priority: task.priority,
+        startDate: task.startDate,
+        dueDate: task.dueDate,
         createdAt: task.createdAt,
         updatedAt: task.updatedAt
       };
@@ -37,6 +39,8 @@ export class TaskController {
         details: task.details,
         status: task.status,
         priority: task.priority,
+        startDate: task.startDate,
+        dueDate: task.dueDate,
         createdAt: task.createdAt,
         updatedAt: task.updatedAt
       }));
@@ -70,6 +74,8 @@ export class TaskController {
         details: task.details,
         status: task.status,
         priority: task.priority,
+        startDate: task.startDate,
+        dueDate: task.dueDate,
         createdAt: task.createdAt,
         updatedAt: task.updatedAt
       };
@@ -105,6 +111,8 @@ export class TaskController {
         details: updatedTask.details,
         status: updatedTask.status,
         priority: updatedTask.priority,
+        startDate: updatedTask.startDate,
+        dueDate: updatedTask.dueDate,
         createdAt: updatedTask.createdAt,
         updatedAt: updatedTask.updatedAt
       };

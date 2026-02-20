@@ -18,6 +18,8 @@ export interface Task {
   details: string;
   status: TaskStatus;
   priority: TaskPriority;
+  startDate: Date;
+  dueDate: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +29,8 @@ export interface CreateTaskDTO {
   details: string;
   status: TaskStatus;
   priority: TaskPriority;
+  startDate: Date;
+  dueDate: Date;
 }
 
 export interface UpdateTaskDTO {
@@ -34,6 +38,8 @@ export interface UpdateTaskDTO {
   details?: string;
   status?: TaskStatus;
   priority?: TaskPriority;
+  startDate?: Date;
+  dueDate?: Date;
 }
 
 export interface TaskResponse {
@@ -42,6 +48,8 @@ export interface TaskResponse {
   details: string;
   status: TaskStatus;
   priority: TaskPriority;
+  startDate: Date;
+  dueDate: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -57,6 +65,8 @@ export class TaskModel {
       details: taskData.details,
       status: taskData.status,
       priority: taskData.priority,
+      startDate: taskData.startDate,
+      dueDate: taskData.dueDate,
       createdAt: new Date(),
       updatedAt: new Date()
     };
