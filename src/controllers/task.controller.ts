@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { TaskModel, CreateTaskDTO, UpdateTaskDTO, TaskResponse } from '../models/task.model';
+import { TaskModel } from '../models/task.model';
+import { CreateTaskDTO, UpdateTaskDTO, TaskResponse } from '../dtos/task.dto';
 
 export class TaskController {
   static async createTask(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -17,6 +17,8 @@ backend/
 │   ├── models/
 │   ├── dtos/
 │   └── types/
+├   └── validations/
+
 ```
 
 Copilot must strictly follow this architecture.

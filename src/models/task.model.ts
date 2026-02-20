@@ -1,48 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
-
-export enum TaskStatus {
-  TODO = 'To Do',
-  IN_PROGRESS = 'In Progress',
-  COMPLETED = 'Completed'
-}
-
-export enum TaskPriority {
-  LOW = 'Low',
-  MEDIUM = 'Medium',
-  HIGH = 'High'
-}
+import { TaskStatus, TaskPriority } from '../types/task.types';
+import { CreateTaskDTO, UpdateTaskDTO } from '../dtos/task.dto';
 
 export interface Task {
-  id: string;
-  name: string;
-  details: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  startDate: Date;
-  dueDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface CreateTaskDTO {
-  name: string;
-  details: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  startDate: Date;
-  dueDate: Date;
-}
-
-export interface UpdateTaskDTO {
-  name?: string;
-  details?: string;
-  status?: TaskStatus;
-  priority?: TaskPriority;
-  startDate?: Date;
-  dueDate?: Date;
-}
-
-export interface TaskResponse {
   id: string;
   name: string;
   details: string;
