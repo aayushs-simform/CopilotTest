@@ -1,6 +1,10 @@
-## Project Context
+## TypeScript Express Backend – Architecture & Development Standards
 
-This project is a TypeScript-based Express backend application with the following structure:
+---
+
+## 1. Project Architecture
+
+Project structure:
 
 ```
 backend/
@@ -10,99 +14,127 @@ backend/
 │   ├── controllers/
 │   ├── routes/
 │   ├── middleware/
-│   └── models/
+│   ├── models/
+│   ├── dtos/
+│   └── types/
 ```
 
-Copilot must follow the architecture and constraints defined below.
+Copilot must strictly follow this architecture.
 
 ---
 
-## General Development Rules
+## 2. Core Technical Standards
 
-- Use **TypeScript strict mode** standards.
-- Use proper **ES module imports**.
-- Maintain **clean architecture separation**:
+- Use **TypeScript with strict mode enabled**
+- Use **ES module syntax**
+- Maintain strict separation of concerns:
   - Routes → Controllers → Models
 
-- Do not introduce any database or ORM.
-- Use **in-memory storage only**.
-- Do not modify files outside the defined scope unless explicitly required.
-- If any requirement is unclear or missing, request clarification instead of assuming.
-- Ensure to use UUID v4 for all unique identifiers.
+- No database or ORM usage
+- Use **in-memory storage only**
+- Use **UUID v4** for all unique identifiers
+- Do not modify files outside the requested scope
+- If any requirement is unclear, request clarification
 
 ---
 
-## API Design Standards
-
-- All endpoints must follow **REST API standards**.
-- Use plural resource naming.
-- Use appropriate HTTP methods:
-  - `GET` – Fetch data
-  - `POST` – Create
-  - `PUT` – Update (full)
-  - `PATCH` – Partial update
-  - `DELETE` – Remove
-
-- Return appropriate HTTP status codes.
-- Every endpoint must:
-  - Validate input usinf Joi validations.
-  - Use centralized response format
-  - Handle errors via global error handler
-
----
-
-## Folder Responsibilities
+## 3. Folder Responsibilities
 
 ### routes/
 
-- Define API endpoints only.
-- Do not include business logic.
-- Attach Joi validation middleware before controller execution.
-- Forward all errors using `next()` to global error handler.
-- Export router as default.
+- Define endpoints only
+- No business logic
+- Attach Joi validation middleware before controller
+- Forward errors using `next()`
+- Export router as default
 
 ---
 
 ### controllers/
 
-- Contain only business logic.
-- Must not contain validation schema definitions.
-- Must not send raw responses.
-- Must use centralized response structure.
-- Must properly handle async errors using `try/catch` and forward to `next()`.
+- Contain business logic only
+- No Joi schemas
+- No raw `res.json()` usage
+- Use centralized response structure
+- Wrap all async logic in try/catch
+- Forward errors using `next(error)`
 
 ---
 
 ### models/
 
-- Define TypeScript interfaces for all entities.
-- Use proper typing.
-- Define request and response DTO types where required.
-- Maintain in-memory storage using:
-  - `Map`
-  - or `Array`
+- Define TypeScript interfaces
+- Encapsulate in-memory storage
+- Storage must use:
+  - `Map` or `Array`
 
-- Storage must be encapsulated and not directly mutated from outside controllers.
-
----
-
-## Validation Requirements
-
-- Use **Joi** for validation.
-- Create Joi schemas per endpoint.
-- Validate:
-  - Request body
-  - Request params
-  - Query parameters
-
-- Reject invalid requests with structured error response.
-- Do not process controller logic if validation fails.
+- Do not allow direct external mutation
+- Controllers must interact through defined methods only
 
 ---
 
-## Centralized Response Structure
+### dtos/
 
-All API responses must strictly follow this structure:
+- Define request DTOs
+- Define response DTOs
+- Maintain strict typing
+- No business logic
+
+---
+
+### types/
+
+- Define shared interfaces
+- Define custom types
+- Define reusable generic types
+- Keep pure type definitions only
+
+---
+
+### middleware/
+
+- Validation middleware
+- Global error handler
+- No business logic
+
+---
+
+## 4. API Design Standards
+
+- Follow REST standards
+
+- Use plural resource naming
+
+- HTTP Methods:
+  - GET – Retrieve
+  - POST – Create
+  - PUT – Full update
+  - PATCH – Partial update
+  - DELETE – Remove
+
+- Return proper HTTP status codes
+
+- All endpoints must:
+  - Validate request body
+  - Validate params
+  - Validate query
+  - Use centralized response format
+  - Use global error handling
+
+---
+
+## 5. Validation Rules
+
+- Use **Joi**
+- Define validation schemas per endpoint
+- Validation must happen before controller execution
+- Reject invalid requests immediately
+- Do not execute controller logic if validation fails
+- Return structured error response
+
+---
+
+## 6. Centralized Response Structure
 
 ### Success Response
 
@@ -113,6 +145,14 @@ All API responses must strictly follow this structure:
   data: T
 }
 ```
+
+Rules:
+
+- `status` must be true
+- `data` included only when applicable
+- No additional fields
+
+---
 
 ### Error Response
 
@@ -125,74 +165,74 @@ All API responses must strictly follow this structure:
 
 Rules:
 
-- Do not change keys.
-- Do not add extra fields.
-- Always return consistent structure.
-- `data` must only be included when applicable.
+- `status` must be false
+- Do not expose stack traces
+- Do not include extra fields
 
 ---
 
-## Global Error Handling
+## 7. Global Error Handling
 
-- Use a centralized error handling middleware in `middleware/errorHandler.ts`.
-- All errors must pass through global error handler.
-- Do not send error responses directly from controllers.
+- Implement centralized error handler in `middleware/errorHandler.ts`
+- All errors must pass through it
+- Controllers must not send error responses directly
 - Handle:
   - Validation errors
   - Not found errors
   - Internal server errors
 
-- Return structured error response format only.
+- Always return structured error format
 
 ---
 
-## CORS
+## 8. CORS Configuration
 
-- Enable CORS globally in `app.ts`.
-- Use proper configuration.
-- Allow JSON content-type.
-- Ensure preflight support.
-
----
-
-## In-Memory Storage Rules
-
-- No database usage.
-- No external persistence.
-- Use TypeScript-typed storage.
-- Storage must be initialized in memory and reset on server restart.
-- Controllers interact with storage through defined models.
+- Enable CORS globally in `app.ts`
+- Allow JSON content-type
+- Support preflight requests
+- Use proper configuration
 
 ---
 
-## Error Handling Standards
+## 9. In-Memory Storage Rules
 
-- Always wrap async controller logic in try/catch.
-- Forward errors using `next(error)`.
-- Do not expose internal stack traces.
-- Return meaningful error messages.
-- Use proper HTTP status codes.
-
----
-
-## Code Quality Standards
-
-- Use strict typing everywhere.
-- Avoid `any`.
-- Use interfaces and generics properly.
-- Follow consistent naming conventions.
-- Keep functions small and single-responsibility.
-- Avoid duplication.
+- No database usage
+- No file-based persistence
+- No external storage services
+- Storage resets on server restart
+- Use strictly typed storage
+- Encapsulate storage inside models
 
 ---
 
-## What Not To Do
+## 10. Error Handling Standards
 
-- Do not introduce database integration.
-- Do not change project structure.
-- Do not bypass Joi validation.
-- Do not send raw `res.json()` without centralized format.
-- Do not implement business logic inside routes.
-- Do not ignore global error handler.
-- Do not modify unrelated files.
-- Do not assume requirements that are not specified.
+- Wrap async controller logic in try/catch
+- Forward errors using `next(error)`
+- Use meaningful error messages
+- Use correct HTTP status codes
+- Never leak internal implementation details
+
+---
+
+## 11. Code Quality Standards
+
+- No `any` type
+- Use interfaces and generics properly
+- Follow consistent naming conventions
+- Small, single-responsibility functions
+- Avoid duplication
+- Maintain readability and scalability
+
+---
+
+## 12. Strict Prohibitions
+
+- Do not introduce database integration
+- Do not modify project structure
+- Do not bypass Joi validation
+- Do not send raw responses
+- Do not implement business logic in routes
+- Do not skip global error handler
+- Do not modify unrelated files
+- Do not assume unspecified requirements

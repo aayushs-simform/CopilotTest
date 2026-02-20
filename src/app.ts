@@ -2,12 +2,14 @@ import express, { Application } from 'express';
 import healthRoutes from './routes/health.routes';
 import taskRoutes from './routes/task.routes';
 import { errorHandler } from './middleware/errorHandler';
+import { requestLogger } from './middleware/logger';
 
 const app: Application = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(requestLogger);
 
 // Routes
 app.use('/', healthRoutes);
