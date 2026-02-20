@@ -95,6 +95,50 @@ export class TaskController {
       const { id } = req.params;
       const updateData: UpdateTaskDTO = req.body;
 
+      // Check if task exists first
+      const existingTask = TaskModel.findById(id);
+      if (!existingTask) {
+        res.status(404).json({
+          status: false,
+          message: 'Task not found'
+        });
+        return;
+      }
+
+      // If task is completed, only allow status updates
+      if (existingTask.status === 'Completed') {
+        const updateKeys = Object.keys(updateData);
+        const hasNonStatusUpdates = updateKeys.some(key => key !== 'status');
+        
+        if (hasNonStatusUpdates) {
+          res.status(400).json({
+            status: false,
+            message: 'Completed tasks can only be updated by changing the status field'
+          });
+          return;
+        }
+      }
+
+      // Validate high priority date constraint for updates
+      const finalPriority = updateData.priority || existingTask.priority;
+      const finalStartDate = updateData.startDate || existingTask.startDate;
+      const finalDueDate = updateData.dueDate || existingTask.dueDate;
+
+      if (finalPriority === 'High') {
+        const start = new Date(finalStartDate);
+        const due = new Date(finalDueDate);
+        const diffTime = due.getTime() - start.getTime();
+        const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+        if (diffDays > 7) {
+          res.status(400).json({
+            status: false,
+            message: 'High priority tasks must have a due date within 7 days from start date'
+          });
+          return;
+        }
+      }
+
       const updatedTask = TaskModel.update(id, updateData);
 
       if (!updatedTask) {

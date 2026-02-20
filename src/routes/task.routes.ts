@@ -7,10 +7,10 @@ const router = Router();
 
 // Joi validation schemas
 const createTaskSchema = Joi.object({
-  name: Joi.string().required().min(1).max(200).messages({
+  name: Joi.string().required().min(1).max(50).messages({
     'string.empty': 'Task name is required',
     'string.min': 'Task name must be at least 1 character',
-    'string.max': 'Task name must not exceed 200 characters',
+    'string.max': 'Task name must not exceed 50 characters',
     'any.required': 'Task name is required'
   }),
   details: Joi.string().required().min(1).messages({
@@ -41,13 +41,30 @@ const createTaskSchema = Joi.object({
     'date.greater': 'Due date must be after start date',
     'any.required': 'Due date is required'
   })
+}).custom((value, helpers) => {
+  const { startDate, dueDate, priority } = value;
+  
+  if (priority === 'High' && startDate && dueDate) {
+    const start = new Date(startDate);
+    const due = new Date(dueDate);
+    const diffTime = due.getTime() - start.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    
+    if (diffDays > 7) {
+      return helpers.error('custom.highPriorityDueDate');
+    }
+  }
+  
+  return value;
+}).messages({
+  'custom.highPriorityDueDate': 'High priority tasks must have a due date within 7 days from start date'
 });
 
 const updateTaskSchema = Joi.object({
-  name: Joi.string().min(1).max(200).messages({
+  name: Joi.string().min(1).max(50).messages({
     'string.empty': 'Task name cannot be empty',
     'string.min': 'Task name must be at least 1 character',
-    'string.max': 'Task name must not exceed 200 characters'
+    'string.max': 'Task name must not exceed 50 characters'
   }),
   details: Joi.string().min(1).messages({
     'string.empty': 'Task details cannot be empty',
@@ -77,6 +94,24 @@ const updateTaskSchema = Joi.object({
   })
 }).min(1).messages({
   'object.min': 'At least one field must be provided for update'
+}).custom((value, helpers) => {
+  const { startDate, dueDate, priority } = value;
+  
+  // Only validate if priority is being set to High and we have both dates
+  if (priority === 'High' && startDate && dueDate) {
+    const start = new Date(startDate);
+    const due = new Date(dueDate);
+    const diffTime = due.getTime() - start.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    
+    if (diffDays > 7) {
+      return helpers.error('custom.highPriorityDueDate');
+    }
+  }
+  
+  return value;
+}).messages({
+  'custom.highPriorityDueDate': 'High priority tasks must have a due date within 7 days from start date'
 });
 
 const taskIdParamSchema = Joi.object({
